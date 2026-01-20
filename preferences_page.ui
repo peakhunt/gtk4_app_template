@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+
+  <template class="PreferencesPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="spacing">24</property>
+    <property name="margin-top">24</property>
+    <property name="margin-bottom">24</property>
+    <property name="margin-start">24</property>
+    <property name="margin-end">24</property>
+
+    <!-- Header status page -->
+    <child>
+      <object class="AdwStatusPage" id="status">
+        <property name="icon-name">preferences-system-symbolic</property>
+        <property name="title">Preferences</property>
+        <property name="description">Adjust your application settings here</property>
+      </object>
+    </child>
+
+    <!-- Preferences content -->
+    <child>
+      <object class="AdwPreferencesPage" id="prefs_page">
+        <property name="title">Settings</property>
+
+        <!-- Appearance group -->
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title">Appearance</property>
+
+            <child>
+              <object class="AdwActionRow">
+                <property name="title">Dark Mode</property>
+                <property name="subtitle">Use a dark theme throughout the app</property>
+                <child type="suffix">
+                  <object class="GtkSwitch" id="dark_mode_switch"/>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Notifications group -->
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title">Notifications</property>
+
+            <child>
+              <object class="AdwActionRow">
+                <property name="title">Enable Notifications</property>
+                <property name="subtitle">Show alerts for important updates</property>
+                <child type="suffix">
+                  <object class="GtkSwitch" id="notifications_switch"/>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

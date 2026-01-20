@@ -6,7 +6,12 @@ CC      := gcc
 CFLAGS  := -Wall -g $(shell pkg-config --cflags gtk4 libadwaita-1)
 LDFLAGS := $(shell pkg-config --libs gtk4 libadwaita-1)
 
-SRC := main.c your_app.c main_window.c
+SRC := main.c							\
+			 your_app.c 				\
+			 main_window.c 			\
+			 dashboard_page.c		\
+			 preferences_page.c
+
 BUILDDIR := build
 DEPDIR   := $(BUILDDIR)/.deps
 

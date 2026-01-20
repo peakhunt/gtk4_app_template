@@ -1,4 +1,6 @@
 #include "main_window.h"
+#include "dashboard_page.h"
+#include "preferences_page.h"
 
 struct _MainWindow {
   AdwApplicationWindow parent_instance;
@@ -18,12 +20,12 @@ toggle_sidebar (GtkButton *button, MainWindow *self)
   adw_overlay_split_view_set_show_sidebar (self->split_view, !shown);
 }
 
-/* Switch to Documents page */
+/* Switch to Dashboard page */
 static void
-show_documents (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+show_dashboard (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
   MainWindow *self = MAIN_WINDOW (user_data);
-  adw_view_stack_set_visible_child_name (self->main_stack, "documents");
+  adw_view_stack_set_visible_child_name (self->main_stack, "dashboard");
 }
 
 /* Switch to Preferences page */
@@ -35,7 +37,7 @@ show_preferences (GSimpleAction *action, GVariant *parameter, gpointer user_data
 }
 
 static const GActionEntry win_actions[] = {
-  { "show-documents",   show_documents   },
+  { "show-dashboard",   show_dashboard   },
   { "show-preferences", show_preferences },
 };
 
@@ -43,6 +45,10 @@ static void
 main_window_class_init (MainWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  /* Ensure custom page types are registered before template instantiation */
+  g_type_ensure (DASHBOARD_TYPE_PAGE);
+  g_type_ensure (PREFERENCES_TYPE_PAGE);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/Example/main_window.ui");
@@ -65,6 +71,6 @@ main_window_init (MainWindow *self)
                                    G_N_ELEMENTS (win_actions),
                                    self);
 
-  /* Ensure we start on the documents page */
-  adw_view_stack_set_visible_child_name (self->main_stack, "documents");
+  /* Start on the dashboard page */
+  adw_view_stack_set_visible_child_name (self->main_stack, "dashboard");
 }
