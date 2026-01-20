@@ -8,7 +8,7 @@ struct _DashboardPage {
 
 G_DEFINE_TYPE (DashboardPage, dashboard_page, GTK_TYPE_BOX)
 
-  static void
+static void
 dashboard_page_class_init (DashboardPageClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -18,7 +18,7 @@ dashboard_page_class_init (DashboardPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, DashboardPage, refresh_button);
 }
 
-  static void
+static void
 dashboard_page_init (DashboardPage *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));

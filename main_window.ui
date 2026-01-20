@@ -35,7 +35,7 @@
 
                 <!-- Navigation items -->
                 <child>
-                  <object class="GtkListBox">
+                  <object class="GtkListBox" id="left_menu_selector">
                     <style><class name="navigation-sidebar"/></style>
 
                     <child>
@@ -73,7 +73,7 @@
                 <child>
                   <object class="GtkListBox">
                     <style><class name="navigation-sidebar"/></style>
-
+                    <property name="selection-mode">none</property>
                     <child>
                       <object class="GtkListBoxRow">
                         <property name="action-name">app.about</property>

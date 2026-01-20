@@ -6,6 +6,7 @@ struct _MainWindow {
   AdwApplicationWindow parent_instance;
 
   GtkButton           *sidebar_toggle;
+  GtkListBox          *left_menu_selector;
   AdwOverlaySplitView *split_view;
   AdwViewStack        *main_stack;
 };
@@ -54,6 +55,7 @@ main_window_class_init (MainWindowClass *klass)
                                                "/org/gnome/Example/main_window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, MainWindow, sidebar_toggle);
+  gtk_widget_class_bind_template_child (widget_class, MainWindow, left_menu_selector);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, split_view);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, main_stack);
 
@@ -61,16 +63,38 @@ main_window_class_init (MainWindowClass *klass)
 }
 
 static void
+on_stack_visible_child (GObject *stack, GParamSpec *pspec, gpointer user_data)
+{
+  GtkWidget *visible = adw_view_stack_get_visible_child (ADW_VIEW_STACK (stack));
+  if (DASHBOARD_IS_PAGE (visible))
+    g_print ("Dashboard activated\n");
+  else 
+    g_print ("Dashboard deactivated\n");
+
+  if (PREFERENCES_IS_PAGE (visible))
+    g_print ("Preferences activated\n");
+  else
+    g_print ("Preferences deactivated\n");
+}
+
+static void
 main_window_init (MainWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  g_signal_connect (self->main_stack, "notify::visible-child", G_CALLBACK (on_stack_visible_child), NULL);
+
   /* Register window-specific actions (win.*) */
   g_action_map_add_action_entries (G_ACTION_MAP (self),
-                                   win_actions,
-                                   G_N_ELEMENTS (win_actions),
-                                   self);
+      win_actions,
+      G_N_ELEMENTS (win_actions),
+      self);
 
   /* Start on the dashboard page */
-  adw_view_stack_set_visible_child_name (self->main_stack, "dashboard");
+  // adw_view_stack_set_visible_child_name (self->main_stack, "dashboard");
+  GtkListBoxRow *row = gtk_list_box_get_row_at_index (self->left_menu_selector, 0);
+  if (row) gtk_list_box_select_row (self->left_menu_selector, row);
+
+  /* run once at startup */
+  on_stack_visible_child (G_OBJECT (self->main_stack), NULL, NULL);
 }
