@@ -71,7 +71,51 @@ your_app_application_class_init (YourAppApplicationClass *klass)
 }
 
 static void
+your_app_application_about_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	static const char *developers[] = {"developer 1", NULL};
+	YourAppApplication *self = user_data;
+	GtkWindow *window = NULL;
+
+	g_assert (YOUR_APP_IS_APPLICATION (self));
+
+	window = gtk_application_get_active_window (GTK_APPLICATION (self));
+
+	adw_show_about_dialog (GTK_WIDGET (window),
+	                       "application-name", APP_NAME,
+	                       "application-icon", APP_ICON,
+	                       "developer-name", APP_DEVELOPER_NAME,
+	                       "translator-credits", _("translator-credits"),
+	                       "version", APP_VERSION,
+	                       "developers", developers,
+	                       "copyright", APP_COPYRIGHT,
+	                       NULL);
+}
+
+static void
+your_app_application_quit_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+	YourAppApplication *self = user_data;
+
+	g_assert (YOUR_APP_IS_APPLICATION (self));
+
+	g_application_quit (G_APPLICATION (self));
+}
+
+static const GActionEntry app_actions[] = {
+	{ "quit", your_app_application_quit_action },
+	{ "about", your_app_application_about_action },
+};
+
+
+static void
 your_app_application_init (YourAppApplication *self)
 {
-  /* nothing needed here */
+  g_action_map_add_action_entries (G_ACTION_MAP (self),
+	                                 app_actions,
+	                                 G_N_ELEMENTS (app_actions),
+	                                 self);
+	gtk_application_set_accels_for_action (GTK_APPLICATION (self),
+	                                       "app.quit",
+	                                       (const char *[]) { "<control>q", NULL });
 }

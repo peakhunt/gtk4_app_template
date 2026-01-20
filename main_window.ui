@@ -28,31 +28,70 @@
 
             <!-- Sidebar -->
             <child type="sidebar">
-              <object class="GtkListBox">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
                 <style><class name="navigation-sidebar"/></style>
 
+                <!-- Navigation items -->
                 <child>
-                  <object class="GtkListBoxRow">
+                  <object class="GtkListBox">
+                    <style><class name="navigation-sidebar"/></style>
                     <child>
-                      <object class="AdwActionRow">
-                        <property name="title">Documents</property>
-                        <property name="icon-name">document-open-symbolic</property>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title">Documents</property>
+                            <property name="icon-name">document-open-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title">Preferences</property>
+                            <property name="icon-name">preferences-system-symbolic</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
 
+                <!-- Spacer -->
                 <child>
-                  <object class="GtkListBoxRow">
+                  <object class="GtkSeparator"/>
+                </child>
+
+                <!-- About and Quit actions -->
+                <child>
+                  <object class="GtkListBox">
+                    <style><class name="navigation-sidebar"/></style>
                     <child>
-                      <object class="AdwActionRow">
-                        <property name="title">Preferences</property>
-                        <property name="icon-name">preferences-system-symbolic</property>
+                      <object class="GtkListBoxRow">
+                        <property name="action-name">app.about</property>
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title">About</property>
+                            <property name="icon-name">help-about-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="action-name">app.quit</property>
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title">Quit</property>
+                            <property name="icon-name">application-exit-symbolic</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
-
               </object>
             </child>
 
