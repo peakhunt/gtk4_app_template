@@ -28,29 +28,43 @@
 
             <!-- Sidebar -->
             <child type="sidebar">
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <style><class name="sidebar"/></style>
+              <object class="GtkListBox">
+                <style><class name="navigation-sidebar"/></style>
+
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">Item 1</property>
+                  <object class="GtkListBoxRow">
+                    <child>
+                      <object class="AdwActionRow">
+                        <property name="title">Documents</property>
+                        <property name="icon-name">document-open-symbolic</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
+
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">Item 2</property>
+                  <object class="GtkListBoxRow">
+                    <child>
+                      <object class="AdwActionRow">
+                        <property name="title">Preferences</property>
+                        <property name="icon-name">preferences-system-symbolic</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
+
               </object>
             </child>
 
             <!-- Main content -->
             <child type="content">
-              <object class="GtkLabel" id="main_label">
-                <property name="label">Hello, World!</property>
-                <style><class name="title-1"/></style>
+              <object class="AdwStatusPage" id="status_page">
+                <property name="icon-name">applications-system-symbolic</property>
+                <property name="title">Hello, World!</property>
+                <property name="description">This is your polished Libadwaita layout.</property>
               </object>
             </child>
+
           </object>
         </property>
       </object>

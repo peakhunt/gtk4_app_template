@@ -5,7 +5,7 @@ struct _MainWindow {
 
   GtkButton *sidebar_toggle;
   AdwOverlaySplitView *split_view;
-  GtkLabel  *main_label;
+  AdwStatusPage *status_page;
 };
 
 G_DEFINE_FINAL_TYPE (MainWindow, main_window, ADW_TYPE_APPLICATION_WINDOW)
@@ -27,7 +27,7 @@ main_window_class_init (MainWindowClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, MainWindow, sidebar_toggle);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, split_view);
-  gtk_widget_class_bind_template_child (widget_class, MainWindow, main_label);
+  gtk_widget_class_bind_template_child (widget_class, MainWindow, status_page);
 
   gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
 }
@@ -37,4 +37,3 @@ main_window_init (MainWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
-

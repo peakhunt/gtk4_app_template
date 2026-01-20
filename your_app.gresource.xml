@@ -3,6 +3,7 @@
   <gresource prefix="/org/gnome/Example">
     <file preprocess="xml-stripblanks">main_window.ui</file>
     <file preprocess="xml-stripblanks">shortcuts-dialog.ui</file>
+    <file>gtk.css</file>
     <file>images/icon.svg</file>
   </gresource>
 </gresources>

@@ -1,0 +1,34 @@
+/* Sidebar rows: thinner, cleaner */
+.navigation-sidebar row {
+  min-height: 24px;        /* reduce row thickness */
+  padding: 2px 8px;        /* tighter vertical padding */
+  border-radius: 4px;      /* subtle rounded corners */
+}
+
+/* Sidebar labels: slightly smaller text */
+.navigation-sidebar row label {
+  font-size: 0.85em;
+}
+
+/* Hover effect: soft accent background */
+.navigation-sidebar row:hover {
+  background-color: alpha(@accent_color, 0.08);
+}
+
+/* Selected row: solid accent highlight */
+.navigation-sidebar row:selected {
+  background-color: @accent_color;
+  color: white;
+}
+
+/* Main content title styling */
+.title-1 {
+  font-weight: bold;
+  color: @accent_color;
+}
+
+/* Optional: status page description text */
+.adw-statuspage description {
+  color: @text_color;
+  opacity: 0.8;
+}
