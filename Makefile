@@ -1,42 +1,57 @@
 # Makefile to build multiple independent C demos with GTK4/Libadwaita
 
-# List all your demo source files here
 TARGET := your_app
 
 CC      := gcc
 CFLAGS  := -Wall -g $(shell pkg-config --cflags gtk4 libadwaita-1)
 LDFLAGS := $(shell pkg-config --libs gtk4 libadwaita-1)
 
-SRC := main.c your_app.c main_window.c your_app_resources.c
+SRC := main.c your_app.c main_window.c
+BUILDDIR := build
+DEPDIR   := $(BUILDDIR)/.deps
 
-DEPDIR := .deps
+# Generated resource source lives in build/
+RES_XML := your_app.gresource.xml
+RES_C   := $(BUILDDIR)/your_app_resources.c
 
-OBJ := $(SRC:.c=.o)
+OBJ := $(patsubst %.c,$(BUILDDIR)/%.o,$(SRC)) $(BUILDDIR)/your_app_resources.o
 
 .PHONY: all clean run
 
-# Default target: build all demos
-all: $(TARGET)
+# Default target
+all: $(BUILDDIR)/$(TARGET)
 
-$(TARGET): $(OBJ)
-	$(CC) $(OBJ) -o $(TARGET) $(LDFLAGS)
+# Link final binary inside build/
+$(BUILDDIR)/$(TARGET): $(OBJ)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
 
-# Compilation
-%.o: %.c | $(DEPDIR)
+# Compilation rule: put .o and .d files in build/
+$(BUILDDIR)/%.o: %.c | $(DEPDIR)
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
-	mv $*.d $(DEPDIR)/$*.d
+	mv $(BUILDDIR)/$*.d $(DEPDIR)/$*.d
 
+# Resource generation: put generated .c file in build/
+RESOURCE_DEPS := $(shell glib-compile-resources --generate-dependencies $(RES_XML))
 
-RESOURCE_DEPS := $(shell glib-compile-resources --generate-dependencies your_app.gresource.xml)
-
-your_app_resources.c: your_app.gresource.xml $(RESOURCE_DEPS)
+$(RES_C): $(RES_XML) $(RESOURCE_DEPS) | $(BUILDDIR)
 	glib-compile-resources --generate-source --target=$@ $<
 
-clean:
-	rm -f $(TARGET) $(OBJ) your_app_resources.c
-	rm -rf $(DEPDIR)
+# Compile the generated resource .c into .o
+$(BUILDDIR)/your_app_resources.o: $(RES_C) | $(DEPDIR)
+	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
+	mv $(BUILDDIR)/your_app_resources.d $(DEPDIR)/your_app_resources.d
+
+# Ensure build directories exist
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
 
 $(DEPDIR):
 	mkdir -p $(DEPDIR)
 
+# Clean up everything
+clean:
+	rm -rf $(BUILDDIR)
+
+# Include dependency files
 -include $(patsubst %.o,$(DEPDIR)/%.d,$(OBJ))
+
