@@ -111,7 +111,7 @@
                     <property name="title">Dashboard</property>
                     <property name="icon-name">view-dashboard-symbolic</property>
                     <property name="child">
-                      <object class="DashboardPage"/>
+                      <object class="DashboardPage" id="dashboard_page"/>
                     </property>
                   </object>
                 </child>
@@ -122,7 +122,7 @@
                     <property name="title">Preferences</property>
                     <property name="icon-name">preferences-system-symbolic</property>
                     <property name="child">
-                      <object class="PreferencesPage"/>
+                      <object class="PreferencesPage" id="preferences_page"/>
                     </property>
                   </object>
                 </child>

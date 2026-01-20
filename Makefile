@@ -10,7 +10,8 @@ SRC := main.c							\
 			 your_app.c 				\
 			 main_window.c 			\
 			 dashboard_page.c		\
-			 preferences_page.c
+			 preferences_page.c	\
+			 page_signals.c
 
 BUILDDIR := build
 DEPDIR   := $(BUILDDIR)/.deps

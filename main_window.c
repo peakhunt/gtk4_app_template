@@ -9,6 +9,10 @@ struct _MainWindow {
   GtkListBox          *left_menu_selector;
   AdwOverlaySplitView *split_view;
   AdwViewStack        *main_stack;
+
+  DashboardPage       *dashboard_page;
+  PreferencesPage     *preferences_page;
+  GObject             *current_page;
 };
 
 G_DEFINE_FINAL_TYPE (MainWindow, main_window, ADW_TYPE_APPLICATION_WINDOW)
@@ -58,6 +62,8 @@ main_window_class_init (MainWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, MainWindow, left_menu_selector);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, split_view);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, main_stack);
+  gtk_widget_class_bind_template_child (widget_class, MainWindow, dashboard_page);
+  gtk_widget_class_bind_template_child (widget_class, MainWindow, preferences_page);
 
   gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
 }
@@ -65,16 +71,24 @@ main_window_class_init (MainWindowClass *klass)
 static void
 on_stack_visible_child (GObject *stack, GParamSpec *pspec, gpointer user_data)
 {
-  GtkWidget *visible = adw_view_stack_get_visible_child (ADW_VIEW_STACK (stack));
-  if (DASHBOARD_IS_PAGE (visible))
-    g_print ("Dashboard activated\n");
-  else 
-    g_print ("Dashboard deactivated\n");
+  MainWindow *self    = MAIN_WINDOW (user_data);
+  GtkWidget *visible  = adw_view_stack_get_visible_child (self->main_stack);
 
-  if (PREFERENCES_IS_PAGE (visible))
-    g_print ("Preferences activated\n");
-  else
-    g_print ("Preferences deactivated\n");
+  if (self->current_page != NULL)
+  {
+    g_signal_emit_by_name(self->current_page, "deactivated");
+  }
+
+  if (visible == GTK_WIDGET (self->dashboard_page))
+  {
+    self->current_page = G_OBJECT(self->dashboard_page); 
+  }
+  else if (visible == GTK_WIDGET (self->preferences_page))
+  {
+    self->current_page = G_OBJECT(self->preferences_page); 
+  }
+
+  g_signal_emit_by_name (self->current_page, "activated");
 }
 
 static void
@@ -82,7 +96,7 @@ main_window_init (MainWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect (self->main_stack, "notify::visible-child", G_CALLBACK (on_stack_visible_child), NULL);
+  g_signal_connect (self->main_stack, "notify::visible-child", G_CALLBACK (on_stack_visible_child), self);
 
   /* Register window-specific actions (win.*) */
   g_action_map_add_action_entries (G_ACTION_MAP (self),
@@ -96,5 +110,6 @@ main_window_init (MainWindow *self)
   if (row) gtk_list_box_select_row (self->left_menu_selector, row);
 
   /* run once at startup */
-  on_stack_visible_child (G_OBJECT (self->main_stack), NULL, NULL);
+  self->current_page = NULL;
+  on_stack_visible_child(G_OBJECT(self->main_stack), NULL, self);
 }
