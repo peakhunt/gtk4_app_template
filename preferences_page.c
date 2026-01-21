@@ -27,13 +27,11 @@ preferences_page_class_init (PreferencesPageClass *klass)
 static void
 on_page_activated(GObject *stack, GParamSpec *pspec, gpointer user_data)
 {
-  g_print("preferences page activated\n");
 }
 
 static void
 on_page_deactivated(GObject *stack, GParamSpec *pspec, gpointer user_data)
 {
-  g_print("preferences page deactivated\n");
 }
 
 static void
