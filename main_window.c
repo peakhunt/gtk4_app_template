@@ -1,4 +1,5 @@
 #include "main_window.h"
+#include "gauge_widget.h"
 #include "dashboard_page.h"
 #include "preferences_page.h"
 
@@ -50,6 +51,7 @@ main_window_class_init (MainWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   /* Ensure custom page types are registered before template instantiation */
+  g_type_ensure(GAUGE_TYPE_WIDGET);
   g_type_ensure (DASHBOARD_TYPE_PAGE);
   g_type_ensure (PREFERENCES_TYPE_PAGE);
 
