@@ -90,62 +90,42 @@ gauge_widget_rebuild_static(GaugeWidget *self, int w, int h)
 
   cairo_set_antialias(cr, CAIRO_ANTIALIAS_BEST);
 
-  /* Dial arc: top-facing semicircle (left→top→right) */
-  cairo_set_source_rgb(cr, 0.10, 0.10, 0.10);
-  cairo_set_line_width(cr, 2.0);
-  cairo_arc(cr, cx, cy, radius, M_PI, 2 * M_PI);
+  /* --- Background gradient half-circle --- */
+  cairo_pattern_t *bg = cairo_pattern_create_radial(cx, cy, 0, cx, cy, radius);
+  cairo_pattern_add_color_stop_rgb(bg, 0.0, 0.15, 0.15, 0.15);
+  cairo_pattern_add_color_stop_rgb(bg, 1.0, 0.0, 0.0, 0.0);
+  cairo_set_source(cr, bg);
+
+  cairo_arc(cr, cx, cy, radius, M_PI, 2 * M_PI); /* top semicircle */
+  cairo_line_to(cr, cx, cy);                     /* close to center */
+  cairo_close_path(cr);
+  cairo_fill(cr);
+
+  cairo_pattern_destroy(bg);
+
+  /* --- Colored arc (green → yellow → red) --- */
+  cairo_set_line_width(cr, 12.0);
+  cairo_arc(cr, cx, cy, radius - 10, M_PI, 2 * M_PI);
+  cairo_pattern_t *arc = cairo_pattern_create_linear(cx - radius, cy, cx + radius, cy);
+  cairo_pattern_add_color_stop_rgb(arc, 0.0, 0.0, 0.8, 0.0); /* green */
+  cairo_pattern_add_color_stop_rgb(arc, 0.5, 1.0, 0.8, 0.0); /* yellow */
+  cairo_pattern_add_color_stop_rgb(arc, 1.0, 0.8, 0.0, 0.0); /* red */
+  cairo_set_source(cr, arc);
   cairo_stroke(cr);
+  cairo_pattern_destroy(arc);
 
-  /* Major ticks + labels every 20 units */
-  for (int v = (int)self->min; v <= (int)self->max; v += 20) {
-    double a = angle_from_value(v, self->min, self->max);
+  /* --- Tick marks --- */
+  for (int i = 0; i <= 10; i++) {
+    double a = M_PI + i * (M_PI / 10.0);
+    double x1 = cx + cos(a) * (radius - 20);
+    double y1 = cy + sin(a) * (radius - 20);
+    double x2 = cx + cos(a) * (radius - 5);
+    double y2 = cy + sin(a) * (radius - 5);
 
-    double x1 = cx + cos(a) * (radius - 12.0);
-    double y1 = cy + sin(a) * (radius - 12.0);
-    double x2 = cx + cos(a) * (radius - 2.0);
-    double y2 = cy + sin(a) * (radius - 2.0);
-
-    cairo_set_line_width(cr, 2.0);
     cairo_move_to(cr, x1, y1);
     cairo_line_to(cr, x2, y2);
-    cairo_stroke(cr);
-
-    char buf[8];
-    g_snprintf(buf, sizeof(buf), "%d", v);
-
-    PangoLayout *layout = pango_cairo_create_layout(cr);
-    PangoFontDescription *desc = pango_font_description_from_string("Sans 10");
-    pango_layout_set_font_description(layout, desc);
-    pango_layout_set_text(layout, buf, -1);
-
-    int tw = 0, th = 0;
-    pango_layout_get_pixel_size(layout, &tw, &th);
-
-    double lx = cx + cos(a) * (radius - 28.0) - tw / 2.0;
-    double ly = cy + sin(a) * (radius - 28.0) - th / 2.0;
-
-    cairo_save(cr);
-    cairo_translate(cr, lx, ly);
-    pango_cairo_show_layout(cr, layout);
-    cairo_restore(cr);
-
-    pango_font_description_free(desc);
-    g_object_unref(layout);
-  }
-
-  /* Minor ticks every 10 units */
-  for (int v = (int)self->min; v <= (int)self->max; v += 10) {
-    if (v % 20 == 0) continue;
-    double a = angle_from_value(v, self->min, self->max);
-
-    double x1 = cx + cos(a) * (radius - 8.0);
-    double y1 = cy + sin(a) * (radius - 8.0);
-    double x2 = cx + cos(a) * (radius - 2.0);
-    double y2 = cy + sin(a) * (radius - 2.0);
-
-    cairo_set_line_width(cr, 1.5);
-    cairo_move_to(cr, x1, y1);
-    cairo_line_to(cr, x2, y2);
+    cairo_set_line_width(cr, (i % 5 == 0) ? 3.0 : 1.5);
+    cairo_set_source_rgb(cr, 1, 1, 1);
     cairo_stroke(cr);
   }
 
@@ -171,46 +151,45 @@ gauge_widget_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
     cairo_paint(cr);
   }
 
-  /* Needle */
   const double cx = w / 2.0;
   const double cy = h * 0.55;
   const double radius = MIN(w, h) * 0.42;
 
+  /* Needle */
   double na = angle_from_value(self->anim_value, self->min, self->max);
-  double nx = cx + cos(na) * (radius - 20.0);
-  double ny = cy + sin(na) * (radius - 20.0);
+  double nx = cx + cos(na) * (radius - 30);
+  double ny = cy + sin(na) * (radius - 30);
 
-  cairo_set_source_rgb(cr, 0.90, 0.20, 0.20);
-  cairo_set_line_width(cr, 3.0);
+  cairo_set_source_rgb(cr, 1.0, 0.0, 0.0);
+  cairo_set_line_width(cr, 4.0);
   cairo_move_to(cr, cx, cy);
   cairo_line_to(cr, nx, ny);
   cairo_stroke(cr);
 
-  cairo_arc(cr, cx, cy, 4.5, 0, 2 * M_PI);
+  /* Pivot circle */
+  cairo_arc(cr, cx, cy, 6, 0, 2 * M_PI);
+  cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
   cairo_fill(cr);
 
-  /* Digital readout below arc */
-  if (self->show_digital)
-  {
-    PangoLayout *layout = pango_cairo_create_layout(cr);
-    PangoFontDescription *desc = pango_font_description_from_string("Monospace 14");
-    pango_layout_set_font_description(layout, desc);
-
+  /* Digital readout */
+  if (self->show_digital) {
     char buf[32];
-    g_snprintf(buf, sizeof(buf), "%.2f", self->anim_value);
+    g_snprintf(buf, sizeof(buf), "%.1f", self->anim_value);
+
+    PangoLayout *layout = pango_cairo_create_layout(cr);
+    PangoFontDescription *desc = pango_font_description_from_string("Sans Bold 14");
+    pango_layout_set_font_description(layout, desc);
     pango_layout_set_text(layout, buf, -1);
 
     int tw = 0, th = 0;
     pango_layout_get_pixel_size(layout, &tw, &th);
 
     double x = (w - tw) / 2.0;
-    double y = cy + radius * 0.05;
+    double y = cy + radius * 0.1;
 
-    cairo_set_source_rgb(cr, 0.10, 0.10, 0.10);
-    cairo_save(cr);
-    cairo_translate(cr, x, y);
+    cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_move_to(cr, x, y);
     pango_cairo_show_layout(cr, layout);
-    cairo_restore(cr);
 
     pango_font_description_free(desc);
     g_object_unref(layout);
@@ -218,6 +197,7 @@ gauge_widget_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
 
   cairo_destroy(cr);
 }
+
 
 /* --- Measure --- */
 static void
