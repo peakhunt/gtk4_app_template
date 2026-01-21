@@ -71,6 +71,7 @@ on_stack_visible_child (GObject *stack, GParamSpec *pspec, gpointer user_data)
 {
   MainWindow *self    = MAIN_WINDOW (user_data);
   GtkWidget *visible  = adw_view_stack_get_visible_child (self->main_stack);
+  AdwViewStackPage *page = adw_view_stack_get_page(self->main_stack, visible);
 
   if (self->current_page != NULL)
   {
@@ -79,6 +80,9 @@ on_stack_visible_child (GObject *stack, GParamSpec *pspec, gpointer user_data)
 
   self->current_page = G_OBJECT(visible);
   g_signal_emit_by_name (self->current_page, "activated");
+
+  const char *title = adw_view_stack_page_get_title(page);
+  gtk_window_set_title(GTK_WINDOW(self), title);
 }
 
 static void
