@@ -10,8 +10,6 @@ struct _MainWindow {
   AdwOverlaySplitView *split_view;
   AdwViewStack        *main_stack;
 
-  DashboardPage       *dashboard_page;
-  PreferencesPage     *preferences_page;
   GObject             *current_page;
 };
 
@@ -62,8 +60,6 @@ main_window_class_init (MainWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, MainWindow, left_menu_selector);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, split_view);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, main_stack);
-  gtk_widget_class_bind_template_child (widget_class, MainWindow, dashboard_page);
-  gtk_widget_class_bind_template_child (widget_class, MainWindow, preferences_page);
 
   gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
 }
@@ -79,15 +75,7 @@ on_stack_visible_child (GObject *stack, GParamSpec *pspec, gpointer user_data)
     g_signal_emit_by_name(self->current_page, "deactivated");
   }
 
-  if (visible == GTK_WIDGET (self->dashboard_page))
-  {
-    self->current_page = G_OBJECT(self->dashboard_page); 
-  }
-  else if (visible == GTK_WIDGET (self->preferences_page))
-  {
-    self->current_page = G_OBJECT(self->preferences_page); 
-  }
-
+  self->current_page = G_OBJECT(visible);
   g_signal_emit_by_name (self->current_page, "activated");
 }
 
@@ -107,7 +95,10 @@ main_window_init (MainWindow *self)
   /* Start on the dashboard page */
   // adw_view_stack_set_visible_child_name (self->main_stack, "dashboard");
   GtkListBoxRow *row = gtk_list_box_get_row_at_index (self->left_menu_selector, 0);
-  if (row) gtk_list_box_select_row (self->left_menu_selector, row);
+  if (row)
+  {
+    gtk_list_box_select_row (self->left_menu_selector, row);
+  }
 
   /* run once at startup */
   self->current_page = NULL;
