@@ -154,7 +154,9 @@ gauge_widget_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
     pango_layout_get_pixel_size(layout, &tw, &th);
 
     const double x = (w - tw) / 2.0;
-    const double y = cy + radius + 10.0; /* just below the arc */
+    // const double y = cy + radius + 10.0; /* just below the arc */
+    const double y = h * 0.6;
+
 
     cairo_set_source_rgb(cr, 0.10, 0.10, 0.10);
     cairo_save(cr);
