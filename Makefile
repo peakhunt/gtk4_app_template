@@ -12,7 +12,8 @@ SRC := main.c							\
 			 dashboard_page.c		\
 			 preferences_page.c	\
 			 page_signals.c			\
-			 gauge_widget.c
+			 gauge_widget.c			\
+			 ensure.c
 
 BUILDDIR := build
 DEPDIR   := $(BUILDDIR)/.deps

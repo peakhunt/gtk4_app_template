@@ -2,6 +2,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ensure.h"
 #include "your_app.h"
 
 int
@@ -13,6 +14,8 @@ main (int argc, char *argv[])
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
+
+  ensure_types();
 
   app = your_app_application_new ("org.gnome.Example", G_APPLICATION_DEFAULT_FLAGS);
   ret = g_application_run (G_APPLICATION (app), argc, argv);
