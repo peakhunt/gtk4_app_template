@@ -80,7 +80,7 @@
                     <property name="selection-mode">none</property>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="action-name">app.about</property>
+                        <property name="action-name">win.show-about</property>
                         <child>
                           <object class="AdwActionRow">
                             <property name="title">About</property>
@@ -131,6 +131,17 @@
                     <property name="icon-name">preferences-system-symbolic</property>
                     <property name="child">
                       <object class="PreferencesPage" id="preferences_page"/>
+                    </property>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="AdwViewStackPage">
+                    <property name="name">about</property>
+                    <property name="title">About</property>
+                    <property name="icon-name">help-about-symbolic</property>
+                    <property name="child">
+                      <object class="AboutPage" id="about_page"/>
                     </property>
                   </object>
                 </child>

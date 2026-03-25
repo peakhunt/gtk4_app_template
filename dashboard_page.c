@@ -77,4 +77,3 @@ dashboard_page_init (DashboardPage *self)
   g_signal_connect (self->refresh_button, "clicked",
                     G_CALLBACK (gtk_widget_queue_draw), self);
 }
-

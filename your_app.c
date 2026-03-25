@@ -71,31 +71,6 @@ your_app_application_class_init (YourAppApplicationClass *klass)
 }
 
 static void
-your_app_application_about_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
-{
-	YourAppApplication *self = user_data;
-	GtkWindow *window = NULL;
-
-	g_assert (YOUR_APP_IS_APPLICATION (self));
-
-	window = gtk_application_get_active_window (GTK_APPLICATION (self));
-
-	if (MAIN_IS_WINDOW (window))
-		main_window_hide_sidebar_if_collapsed (MAIN_WINDOW (window));
-
-	static const char *developers[] = {"developer 1", NULL};
-	adw_show_about_dialog (GTK_WIDGET (window),
-	                       "application-name", APP_NAME,
-	                       "application-icon", APP_ICON,
-	                       "developer-name", APP_DEVELOPER_NAME,
-	                       "translator-credits", _("translator-credits"),
-	                       "version", APP_VERSION,
-	                       "developers", developers,
-	                       "copyright", APP_COPYRIGHT,
-	                       NULL);
-}
-
-static void
 your_app_application_quit_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
 	YourAppApplication *self = user_data;
@@ -107,7 +82,6 @@ your_app_application_quit_action (GSimpleAction *action, GVariant *parameter, gp
 
 static const GActionEntry app_actions[] = {
 	{ "quit", your_app_application_quit_action },
-	{ "about", your_app_application_about_action },
 };
 
 

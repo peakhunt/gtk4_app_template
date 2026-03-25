@@ -13,4 +13,3 @@
 #define APP_DEVELOPER_NAME    "your name"
 #define APP_VERSION           "0.1.0"
 #define APP_COPYRIGHT         "@ 2026 Your Name"
-

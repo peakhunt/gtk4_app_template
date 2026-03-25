@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+
+  <template class="AboutPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="spacing">24</property>
+    <property name="margin-top">48</property>
+    <property name="margin-bottom">48</property>
+    <property name="margin-start">48</property>
+    <property name="margin-end">48</property>
+
+    <child>
+      <object class="GtkImage">
+        <property name="icon-name">help-about-symbolic</property>
+        <property name="pixel-size">128</property>
+        <style>
+          <class name="accent"/>
+        </style>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">About This App</property>
+        <style>
+          <class name="title-1"/>
+        </style>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Version 1.0.0</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">This is a modern Gtk4 application template using libadwaita. No more modal dialogs!</property>
+        <property name="wrap">true</property>
+        <property name="justify">center</property>
+        <property name="max-width-chars">40</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLinkButton">
+        <property name="label">Project Homepage</property>
+        <property name="uri">https://github.com/example/gtk4-app-template</property>
+      </object>
+    </child>
+  </template>
+</interface>

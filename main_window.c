@@ -3,6 +3,7 @@
 #include "gauge_widget.h"
 #include "dashboard_page.h"
 #include "preferences_page.h"
+#include "about_page.h"
 
 struct _MainWindow {
   AdwApplicationWindow parent_instance;
@@ -42,6 +43,14 @@ show_preferences (GSimpleAction *action, GVariant *parameter, gpointer user_data
   adw_view_stack_set_visible_child_name (self->main_stack, "preferences");
 }
 
+/* Switch to About page */
+static void
+show_about (GSimpleAction *action, GVariant *parameter, gpointer user_data)
+{
+  MainWindow *self = MAIN_WINDOW (user_data);
+  adw_view_stack_set_visible_child_name (self->main_stack, "about");
+}
+
 void
 main_window_hide_sidebar_if_collapsed (MainWindow *self)
 {
@@ -54,6 +63,7 @@ main_window_hide_sidebar_if_collapsed (MainWindow *self)
 static const GActionEntry win_actions[] = {
   { "show-dashboard",   show_dashboard   },
   { "show-preferences", show_preferences },
+  { "show-about",       show_about       },
 };
 
 static void
