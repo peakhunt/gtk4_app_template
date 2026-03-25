@@ -73,7 +73,6 @@ your_app_application_class_init (YourAppApplicationClass *klass)
 static void
 your_app_application_about_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
-	static const char *developers[] = {"developer 1", NULL};
 	YourAppApplication *self = user_data;
 	GtkWindow *window = NULL;
 
@@ -84,6 +83,7 @@ your_app_application_about_action (GSimpleAction *action, GVariant *parameter, g
 	if (MAIN_IS_WINDOW (window))
 		main_window_hide_sidebar_if_collapsed (MAIN_WINDOW (window));
 
+	static const char *developers[] = {"developer 1", NULL};
 	adw_show_about_dialog (GTK_WIDGET (window),
 	                       "application-name", APP_NAME,
 	                       "application-icon", APP_ICON,

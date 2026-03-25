@@ -45,6 +45,8 @@
                           <object class="AdwActionRow">
                             <property name="title">dashboard</property>
                             <property name="icon-name">view-grid-symbolic</property>
+                            <property name="can-target">false</property>
+                            <property name="can-focus">false</property>
                           </object>
                         </child>
                       </object>
@@ -57,6 +59,8 @@
                           <object class="AdwActionRow">
                             <property name="title">Preferences</property>
                             <property name="icon-name">preferences-system-symbolic</property>
+                            <property name="can-target">false</property>
+                            <property name="can-focus">false</property>
                           </object>
                         </child>
                       </object>
@@ -71,7 +75,7 @@
 
                 <!-- About and Quit -->
                 <child>
-                  <object class="GtkListBox">
+                  <object class="GtkListBox" id="bottom_menu_selector">
                     <style><class name="navigation-sidebar"/></style>
                     <property name="selection-mode">none</property>
                     <child>
@@ -81,6 +85,8 @@
                           <object class="AdwActionRow">
                             <property name="title">About</property>
                             <property name="icon-name">help-about-symbolic</property>
+                            <property name="can-target">false</property>
+                            <property name="can-focus">false</property>
                           </object>
                         </child>
                       </object>
@@ -93,6 +99,8 @@
                           <object class="AdwActionRow">
                             <property name="title">Quit</property>
                             <property name="icon-name">application-exit-symbolic</property>
+                            <property name="can-target">false</property>
+                            <property name="can-focus">false</property>
                           </object>
                         </child>
                       </object>

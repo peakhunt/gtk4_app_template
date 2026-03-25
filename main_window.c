@@ -9,6 +9,7 @@ struct _MainWindow {
 
   GtkButton           *sidebar_toggle;
   GtkListBox          *left_menu_selector;
+  GtkListBox          *bottom_menu_selector;
   AdwOverlaySplitView *split_view;
   AdwViewStack        *main_stack;
 
@@ -65,6 +66,7 @@ main_window_class_init (MainWindowClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, MainWindow, sidebar_toggle);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, left_menu_selector);
+  gtk_widget_class_bind_template_child (widget_class, MainWindow, bottom_menu_selector);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, split_view);
   gtk_widget_class_bind_template_child (widget_class, MainWindow, main_stack);
 
@@ -89,7 +91,7 @@ on_stack_visible_child (GObject *stack, GParamSpec *pspec, gpointer user_data)
   const char *title = adw_view_stack_page_get_title(page);
   gtk_window_set_title(GTK_WINDOW(self), title);
 
-  /* Centralized sidebar handling for all page changes */
+  /* Programmatic or keyboard-shortcut page changes should also hide the sidebar */
   main_window_hide_sidebar_if_collapsed (self);
 }
 
