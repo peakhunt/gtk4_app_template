@@ -81,6 +81,9 @@ your_app_application_about_action (GSimpleAction *action, GVariant *parameter, g
 
 	window = gtk_application_get_active_window (GTK_APPLICATION (self));
 
+	if (MAIN_IS_WINDOW (window))
+		main_window_hide_sidebar_if_collapsed (MAIN_WINDOW (window));
+
 	adw_show_about_dialog (GTK_WIDGET (window),
 	                       "application-name", APP_NAME,
 	                       "application-icon", APP_ICON,

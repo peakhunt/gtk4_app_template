@@ -41,6 +41,15 @@ show_preferences (GSimpleAction *action, GVariant *parameter, gpointer user_data
   adw_view_stack_set_visible_child_name (self->main_stack, "preferences");
 }
 
+void
+main_window_hide_sidebar_if_collapsed (MainWindow *self)
+{
+  g_return_if_fail (MAIN_IS_WINDOW (self));
+
+  if (adw_overlay_split_view_get_collapsed (self->split_view))
+    adw_overlay_split_view_set_show_sidebar (self->split_view, FALSE);
+}
+
 static const GActionEntry win_actions[] = {
   { "show-dashboard",   show_dashboard   },
   { "show-preferences", show_preferences },
@@ -79,6 +88,9 @@ on_stack_visible_child (GObject *stack, GParamSpec *pspec, gpointer user_data)
 
   const char *title = adw_view_stack_page_get_title(page);
   gtk_window_set_title(GTK_WINDOW(self), title);
+
+  /* Centralized sidebar handling for all page changes */
+  main_window_hide_sidebar_if_collapsed (self);
 }
 
 static void
